@@ -16,7 +16,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.league_of_impostors_android.pages.HomeScreen
+import com.example.league_of_impostors_android.pages.home.HomeScreen
+import com.example.league_of_impostors_android.pages.roles.RolesScreen
 import com.example.league_of_impostors_android.ui.theme.LeagueOfImpostorsTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    LeagueOfImpostorsApp()
                 }
             }
         }
@@ -37,20 +38,22 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LeagueOfImpostors(modifier: Modifier = Modifier){
+fun LeagueOfImpostorsApp(modifier: Modifier = Modifier){
+    val navController = rememberNavController()
     Surface (
         modifier = modifier,
         color    = MaterialTheme.colorScheme.background
     ){
-        Greeting("Android")
+        LeagueOfImpostorsNavHost(navController = navController)
     }
 }
 
+@Preview
 @Composable
 fun LeagueOfImpostorsNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = "profile"
+    startDestination: String = "home"
 ){
     NavHost(
         modifier = modifier,
@@ -61,15 +64,18 @@ fun LeagueOfImpostorsNavHost(
             HomeScreen(
                 onNavigateToGameLobby = { navController.navigate("friendsList") },
                 onNavigateToHistory = { navController.navigate("friendsList") },
-                onNavigateToRoles = { navController.navigate("friendsList") }
+                onNavigateToRoles = { navController.navigate("roles") }
                 /*...*/
             )
         }
-        composable("history") {  }
+        composable("roles") {
+            RolesScreen()
+        }
     }
 }
+@Preview
 @Composable
-private fun Greeting(name: String) {
+private fun Greeting(name: String = "Allan Serre") {
     Surface(color = MaterialTheme.colorScheme.primary
     ) {
         Text(text = "Hello $name!", modifier = Modifier.padding(24.dp))
@@ -77,10 +83,9 @@ private fun Greeting(name: String) {
 }
 
 
-@Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
     LeagueOfImpostorsTheme {
-        LeagueOfImpostors()
+        LeagueOfImpostorsApp()
     }
 }
