@@ -7,21 +7,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 
-data class Role ( val description : String , val image : String)
+data class Role(val description: String, val image: String)
 class RolesViewModel : ViewModel() {
     private val _uiRoles: List<Role> = getRoles().toList()
-    val uiRoles : List<Role>
+    val uiRoles: List<Role>
         get() = _uiRoles
 
-    private fun getRoles() : List<Role>{
+    private fun getRoles(): List<Role> {
         return getDummyRoles()
         // TODO: Récupérer la liste des roles via l'API firebase
     }
 
-    private fun getDummyRoles() : List<Role> {
+    private fun getDummyRoles(): List<Role> {
         val roles = mutableListOf<Role>()
-        for (i in 1..10){
-            roles.add(Role("Role n° $i", image = "https://dummyimage.com/200"))
+        for (i in 1..10) {
+            roles.add(Role("Role n° $i", image = "https://dummyimage.com/400"))
         }
         return roles
     }

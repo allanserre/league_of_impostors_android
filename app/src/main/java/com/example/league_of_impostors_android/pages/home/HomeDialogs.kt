@@ -26,7 +26,7 @@ import com.example.league_of_impostors_android.utils.AutoFocusTextField
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun JoinGameDialog(onDismissRequest : () -> Unit = {}, onConfirmation : () -> Unit = {}){
+fun JoinGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Unit = {}) {
 
     var lobby_id by remember {
         mutableStateOf("")
@@ -44,7 +44,7 @@ fun JoinGameDialog(onDismissRequest : () -> Unit = {}, onConfirmation : () -> Un
                         .padding(20.dp),
                     value = pseudo,
                     onValueChange = { pseudo = it },
-                    placeholder = { Text(text = "Pseudo" ) }
+                    placeholder = { Text(text = "Pseudo") }
                 )
                 TextField(
                     modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
@@ -79,21 +79,21 @@ fun JoinGameDialog(onDismissRequest : () -> Unit = {}, onConfirmation : () -> Un
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun CreateGameDialog(onDismissRequest : () -> Unit = {}, onConfirmation : () -> Unit = {}){
+fun CreateGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Unit = {}) {
     var text by remember {
         mutableStateOf("")
     }
 
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
-        Card (shape = RoundedCornerShape(16.dp)){
+        Card(shape = RoundedCornerShape(16.dp)) {
             Column {
                 AutoFocusTextField(
                     modifier = Modifier
                         .padding(20.dp),
                     value = text,
                     onValueChange = { text = it },
-                    placeholder = { Text(text = "Pseudo" ) }
+                    placeholder = { Text(text = "Pseudo") }
                 )
                 Row(
                     modifier = Modifier

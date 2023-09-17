@@ -36,26 +36,40 @@ import androidx.compose.ui.window.Dialog
 
 @Preview
 @Composable
-fun HomeScreen(onNavigateToGameLobby : () -> Unit = {},
-               onNavigateToHistory : () -> Unit = {},
-               onNavigateToRoles : () -> Unit = {}){
-    Surface (modifier = Modifier.fillMaxSize()) {
-        Image(painter = painterResource(id = R.drawable.jhin_camille), contentDescription = "fond d'écran page principale", contentScale = ContentScale.FillHeight)
+fun HomeScreen(
+    onNavigateToGameLobby: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
+    onNavigateToRoles: () -> Unit = {}
+) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.jhin_camille),
+            contentDescription = "fond d'écran page principale",
+            contentScale = ContentScale.FillHeight
+        )
         Column {
             Spacer(modifier = Modifier.height(40.dp))
-            Image(modifier = Modifier.fillMaxWidth(), painter = painterResource(id = R.drawable.logo_v1), contentDescription = "Titre de l'application", alignment = Alignment.Center)
+            Image(
+                modifier = Modifier.fillMaxWidth(),
+                painter = painterResource(id = R.drawable.logo_v1),
+                contentDescription = "Titre de l'application",
+                alignment = Alignment.Center
+            )
             ActionButtons(
                 onNavigateToHistory = onNavigateToHistory,
                 onNavigateToRoles = onNavigateToRoles,
-                onNavigateToGameLobby = onNavigateToGameLobby)
+                onNavigateToGameLobby = onNavigateToGameLobby
+            )
         }
     }
 }
 
 @Composable
-fun ActionButtons(onNavigateToGameLobby : () -> Unit = {},
-                  onNavigateToHistory : () -> Unit = {},
-                  onNavigateToRoles : () -> Unit = {}){
+fun ActionButtons(
+    onNavigateToGameLobby: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
+    onNavigateToRoles: () -> Unit = {}
+) {
 
     val openCreateGameDialog = remember {
         mutableStateOf(false)
@@ -70,13 +84,18 @@ fun ActionButtons(onNavigateToGameLobby : () -> Unit = {},
                 onDismissRequest = { openCreateGameDialog.value = false }
             )
         }
+
         openJoinGameDialog.value -> {
             JoinGameDialog(
                 onDismissRequest = { openJoinGameDialog.value = false }
             )
         }
     }
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
         HomeButton(onClick = { openCreateGameDialog.value = true }, text = "Créer Partie")
         HomeButton(onClick = { openJoinGameDialog.value = true }, text = "Rejoindre Partie")
         HomeButton(onClick = { onNavigateToRoles() }, text = "Rôles")
@@ -85,9 +104,11 @@ fun ActionButtons(onNavigateToGameLobby : () -> Unit = {},
 }
 
 @Composable
-fun HomeButton(modifier: Modifier = Modifier,
-               onClick: () -> Unit,
-               text : String){
+fun HomeButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    text: String
+) {
     ElevatedButton(onClick = onClick, modifier = modifier) {
         Text(text = text)
     }

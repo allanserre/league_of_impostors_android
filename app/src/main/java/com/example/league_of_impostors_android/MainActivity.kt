@@ -38,12 +38,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LeagueOfImpostorsApp(modifier: Modifier = Modifier){
+fun LeagueOfImpostorsApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    Surface (
+    Surface(
         modifier = modifier,
-        color    = MaterialTheme.colorScheme.background
-    ){
+        color = MaterialTheme.colorScheme.background
+    ) {
         LeagueOfImpostorsNavHost(navController = navController)
     }
 }
@@ -54,7 +54,7 @@ fun LeagueOfImpostorsNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = "home"
-){
+) {
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -73,10 +73,12 @@ fun LeagueOfImpostorsNavHost(
         }
     }
 }
+
 @Preview
 @Composable
 private fun Greeting(name: String = "Allan Serre") {
-    Surface(color = MaterialTheme.colorScheme.primary
+    Surface(
+        color = MaterialTheme.colorScheme.primary
     ) {
         Text(text = "Hello $name!", modifier = Modifier.padding(24.dp))
     }

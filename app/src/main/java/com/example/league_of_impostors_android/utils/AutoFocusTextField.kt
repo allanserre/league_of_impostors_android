@@ -12,13 +12,15 @@ import androidx.compose.ui.focus.focusRequester
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AutoFocusTextField(modifier: Modifier,
-                       placeholder : @Composable () -> Unit,
-                       value : String = "",
-                       onValueChange : (String) -> Unit ){
+fun AutoFocusTextField(
+    modifier: Modifier,
+    placeholder: @Composable () -> Unit,
+    value: String = "",
+    onValueChange: (String) -> Unit
+) {
 
     val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         focusRequester.requestFocus()
     }
 

@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Surface
@@ -19,99 +17,60 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.league_of_impostors_android.R
 import com.example.league_of_impostors_android.ui.theme.LeagueOfImpostorsTheme
 
 @Preview()
 @Composable
-fun RolesScreen(){
+fun RolesScreen() {
     LeagueOfImpostorsTheme {
-        Surface (modifier = Modifier.fillMaxSize()) {
-            Image(painter = painterResource(id = R.drawable.kayle_morg), contentDescription = "fond d'écran page principale", contentScale = ContentScale.FillHeight)
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.kayle_morg),
+                contentDescription = "fond d'écran page principale",
+                contentScale = ContentScale.FillHeight
+            )
             Column {
                 Spacer(modifier = Modifier.height(40.dp))
-                Image(modifier = Modifier.fillMaxWidth(), painter = painterResource(id = R.drawable.logo_v1), contentDescription = "Titre de l'application", alignment = Alignment.Center)
+                Image(
+                    modifier = Modifier.fillMaxWidth(),
+                    painter = painterResource(id = R.drawable.logo_v1),
+                    contentDescription = "Titre de l'application",
+                    alignment = Alignment.Center
+                )
                 Spacer(modifier = Modifier.height(20.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(
-                        rememberScrollState()
-                    )) {
-
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .width(200.dp)
-                            .height(150.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .width(200.dp)
-                            .height(150.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .width(200.dp)
-                            .height(150.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .width(200.dp)
-                            .height(150.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .width(200.dp)
-                            .height(150.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .width(200.dp)
-                            .height(150.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
-                    }
-                }
+                RolesList()
             }
         }
     }
 }
 
 @Composable
-fun RolesList(rolesViewModel: RolesViewModel = RolesViewModel()){
+fun RolesList(rolesViewModel: RolesViewModel = RolesViewModel()) {
     val uiRoles = rolesViewModel.uiRoles
 
-    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
-        items(uiRoles){ role -> {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-        }
-
+        itemsIndexed(uiRoles) { index, role ->
+            val even = index % 2 == 0
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = if (even) Alignment.Start else Alignment.End
+            ) {
+                RoleCard(role = role)
+            }
         }
     }
 }
 
 @Composable
-fun RoleCard(role : Role) {
+fun RoleCard(role: Role) {
     ElevatedCard(
         modifier = Modifier
             .padding(20.dp)
@@ -119,7 +78,22 @@ fun RoleCard(role : Role) {
             .height(150.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
-        AsyncImage(painter = Painter., contentDescription = )
-        Text(text = role.description)
+        AsyncImage(
+            model = role.image,
+            contentDescription = "",
+            placeholder = painterResource(id = R.drawable.logo_v1)
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = role.description,
+            textAlign = TextAlign.Center
+        )
     }
+}
+
+
+@Preview
+@Composable
+fun RoleCardPreview() {
+    RoleCard(role = Role("carte de démonstration", image = "https://dummyimage.com/100"))
 }
