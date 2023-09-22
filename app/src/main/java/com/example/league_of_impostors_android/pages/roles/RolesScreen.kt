@@ -1,7 +1,9 @@
 package com.example.league_of_impostors_android.pages.roles
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,13 +57,14 @@ fun RolesScreen() {
 fun RolesList(rolesViewModel: RolesViewModel = RolesViewModel()) {
     val uiRoles = rolesViewModel.uiRoles
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(modifier = Modifier.fillMaxSize(),   verticalArrangement = Arrangement.spacedBy(40.dp), contentPadding = PaddingValues(20.dp)) {
 
         itemsIndexed(uiRoles) { index, role ->
             val even = index % 2 == 0
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = if (even) Alignment.Start else Alignment.End
+                horizontalAlignment = if (even) Alignment.Start else Alignment.End,
+
             ) {
                 RoleCard(role = role)
             }
@@ -69,11 +72,11 @@ fun RolesList(rolesViewModel: RolesViewModel = RolesViewModel()) {
     }
 }
 
+
 @Composable
 fun RoleCard(role: Role) {
     ElevatedCard(
         modifier = Modifier
-            .padding(20.dp)
             .width(200.dp)
             .height(150.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)

@@ -16,8 +16,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.league_of_impostors_android.pages.history.HistoryScreen
 import com.example.league_of_impostors_android.pages.home.HomeScreen
 import com.example.league_of_impostors_android.pages.roles.RolesScreen
+import com.example.league_of_impostors_android.pages.room.WaitingRoomScreen
 import com.example.league_of_impostors_android.ui.theme.LeagueOfImpostorsTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +46,7 @@ fun LeagueOfImpostorsApp(modifier: Modifier = Modifier) {
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
-        LeagueOfImpostorsNavHost(navController = navController)
+        LeagueOfImpostorsNavHost(navController = navController, startDestination = "room")
     }
 }
 
@@ -62,14 +64,23 @@ fun LeagueOfImpostorsNavHost(
     ) {
         composable("home") {
             HomeScreen(
-                onNavigateToGameLobby = { navController.navigate("friendsList") },
-                onNavigateToHistory = { navController.navigate("friendsList") },
+                onNavigateToGameLobby = { navController.navigate("room") },
+                onNavigateToHistory = { navController.navigate("history") },
                 onNavigateToRoles = { navController.navigate("roles") }
                 /*...*/
             )
         }
         composable("roles") {
             RolesScreen()
+        }
+        composable("history"){
+            HistoryScreen()
+        }
+        composable("room"){
+            WaitingRoomScreen()
+        }
+        composable("game"){
+
         }
     }
 }
