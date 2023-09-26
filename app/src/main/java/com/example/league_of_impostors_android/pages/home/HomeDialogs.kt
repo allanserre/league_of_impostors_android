@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -20,15 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.league_of_impostors_android.ui.theme.LeagueOfImpostorsTheme
 import com.example.league_of_impostors_android.utils.AutoFocusTextField
 
-
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun JoinGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Unit = {}) {
+fun JoinGameDialog(
+    onDismissRequest: () -> Unit = {},
+    onConfirmation: (String,String) -> Unit,
+    isLoading : Boolean) {
 
-    var lobby_id by remember {
+    var lobbyId by remember {
         mutableStateOf("")
     }
 
@@ -49,25 +52,30 @@ fun JoinGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Unit
                 TextField(
                     modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
                     placeholder = { Text(text = "ID") },
-                    onValueChange = { lobby_id = it },
-                    value = lobby_id
+                    onValueChange = { lobbyId = it },
+                    value = lobbyId
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    TextButton(
-                        onClick = { onDismissRequest() },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        Text("Annuler")
+                    if ( !isLoading ){
+                        TextButton(
+                            onClick = { onDismissRequest() },
+                            modifier = Modifier.padding(8.dp),
+                        ) {
+                            Text("Annuler")
+                        }
+                        TextButton(
+                            onClick = { onConfirmation(lobbyId,pseudo) },
+                            modifier = Modifier.padding(8.dp),
+                        ) {
+                            Text("Rejoindre")
+                        }
                     }
-                    TextButton(
-                        onClick = { onConfirmation() },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        Text("Rejoindre")
+                    else {
+                        CircularProgressIndicator()
                     }
                 }
             }
@@ -77,10 +85,15 @@ fun JoinGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Unit
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun CreateGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Unit = {}) {
-    var text by remember {
+fun CreateGameDialog(
+    onDismissRequest: () -> Unit = {},
+    onConfirmation: (String) -> Unit,
+    isLoading : Boolean
+)
+{
+
+    var username by remember {
         mutableStateOf("")
     }
 
@@ -91,8 +104,8 @@ fun CreateGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Un
                 AutoFocusTextField(
                     modifier = Modifier
                         .padding(20.dp),
-                    value = text,
-                    onValueChange = { text = it },
+                    value = username,
+                    onValueChange = { username = it },
                     placeholder = { Text(text = "Pseudo") }
                 )
                 Row(
@@ -100,21 +113,42 @@ fun CreateGameDialog(onDismissRequest: () -> Unit = {}, onConfirmation: () -> Un
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    TextButton(
-                        onClick = { onDismissRequest() },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        Text("Annuler")
+                    if ( !isLoading ){
+                        TextButton(
+                            onClick = { onDismissRequest() },
+                            modifier = Modifier.padding(8.dp),
+                        ) {
+                            Text("Annuler")
+                        }
+                        TextButton(
+                            onClick = { onConfirmation(username) },
+                            modifier = Modifier.padding(8.dp),
+                        ) {
+                            Text("Créer")
+                        }
+                    } else {
+                        CircularProgressIndicator()
                     }
-                    TextButton(
-                        onClick = { onConfirmation() },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        Text("Créer")
-                    }
+
                 }
             }
 
         }
+    }
+}
+
+@Preview
+@Composable
+fun CreateGameDialogPreview(){
+    LeagueOfImpostorsTheme {
+        CreateGameDialog(onConfirmation = { s1 : String -> {} } , onDismissRequest = {} , isLoading = true)
+    }
+}
+
+@Preview
+@Composable
+fun JoinGameDialogPreview(){
+    LeagueOfImpostorsTheme {
+        JoinGameDialog(onConfirmation = { s1 : String,s2 : String -> {} } , onDismissRequest = {}, isLoading = false)
     }
 }

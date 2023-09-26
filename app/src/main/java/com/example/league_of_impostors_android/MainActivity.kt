@@ -21,6 +21,9 @@ import com.example.league_of_impostors_android.pages.home.HomeScreen
 import com.example.league_of_impostors_android.pages.roles.RolesScreen
 import com.example.league_of_impostors_android.pages.room.WaitingRoomScreen
 import com.example.league_of_impostors_android.ui.theme.LeagueOfImpostorsTheme
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +49,7 @@ fun LeagueOfImpostorsApp(modifier: Modifier = Modifier) {
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
-        LeagueOfImpostorsNavHost(navController = navController, startDestination = "room")
+        LeagueOfImpostorsNavHost(navController = navController, startDestination = "home")
     }
 }
 

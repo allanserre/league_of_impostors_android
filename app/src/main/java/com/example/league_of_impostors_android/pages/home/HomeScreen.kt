@@ -3,36 +3,27 @@ package com.example.league_of_impostors_android.pages.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.league_of_impostors_android.R
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import com.example.league_of_impostors_android.viewmodel.WebSocketViewModel
 
 @Preview
 @Composable
@@ -68,8 +59,10 @@ fun HomeScreen(
 fun ActionButtons(
     onNavigateToGameLobby: () -> Unit = {},
     onNavigateToHistory: () -> Unit = {},
-    onNavigateToRoles: () -> Unit = {}
+    onNavigateToRoles: () -> Unit = {},
+    webSocketViewModel: WebSocketViewModel = WebSocketViewModel()
 ) {
+    val message by webSocketViewModel.messages
 
     val openCreateGameDialog = remember {
         mutableStateOf(false)
@@ -78,16 +71,32 @@ fun ActionButtons(
         mutableStateOf(false)
     }
 
+    val isLoading = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit){
+        print(message)
+    }
+
     when {
         openCreateGameDialog.value -> {
             CreateGameDialog(
-                onDismissRequest = { openCreateGameDialog.value = false }
+                onConfirmation = {
+                    isLoading.value = true
+                    webSocketViewModel.connect()
+                    webSocketViewModel.createGame(it)
+                },
+                onDismissRequest = { openCreateGameDialog.value = false },
+                isLoading = isLoading.value
             )
         }
 
         openJoinGameDialog.value -> {
             JoinGameDialog(
-                onDismissRequest = { openJoinGameDialog.value = false }
+                onConfirmation = { s: String, s1: String -> isLoading.value = true },
+                onDismissRequest = { openJoinGameDialog.value = false },
+                isLoading = isLoading.value
             )
         }
     }

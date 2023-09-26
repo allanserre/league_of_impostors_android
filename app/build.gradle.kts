@@ -40,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -52,6 +52,15 @@ android {
 dependencies {
     val navVersion = "2.7.2"
 
+    implementation("com.google.dagger:hilt-android:2.44.2")
+    /*kapt("com.google.dagger:hilt-android-compiler:2.44")*/
+
+    implementation("io.socket:socket.io-client:2.1.0") {
+        // excluding org.json which is provided by Android
+        exclude(module="json", group = "org.json")
+
+    }
+    implementation ("com.google.code.gson:gson:2.10.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")

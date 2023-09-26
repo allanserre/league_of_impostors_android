@@ -1,17 +1,13 @@
 package com.example.league_of_impostors_android.pages.room
 
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
@@ -44,11 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.league_of_impostors_android.MainViewModel
 import com.example.league_of_impostors_android.R
+import com.example.league_of_impostors_android.models.Player
 import com.example.league_of_impostors_android.ui.theme.LeagueOfImpostorsTheme
-
-data class PlayerInfo(val name: String)
+import com.example.league_of_impostors_android.viewmodel.WebSocketViewModel
 
 @Composable
 @Preview
@@ -61,13 +54,14 @@ fun WaitingRoomScreen() {
                 contentScale = ContentScale.FillHeight
             )
             PlayerList()
+            LogsDisplayer()
         }
     }
 }
 
 @Composable
-fun PlayerList(mainViewModel: MainViewModel = MainViewModel()){
-    val players by mainViewModel.uiPlayer.collectAsState(initial = emptyList())
+fun PlayerList(webSocketViewModel: WebSocketViewModel = WebSocketViewModel()){
+    val players by webSocketViewModel.players
     LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(5) { index ->
             PlayerCardHolder(index, players)
@@ -76,7 +70,7 @@ fun PlayerList(mainViewModel: MainViewModel = MainViewModel()){
 }
 
 @Composable
-fun PlayerCardHolder(index : Int, players : List<PlayerInfo>){
+fun PlayerCardHolder(index : Int, players : List<Player>){
     if (players.size <= index){
         BlankPlayerCard()
     }else {
@@ -90,7 +84,7 @@ fun BlankPlayerCard() {
 }
 
 @Composable
-fun AnimatedPlayerCard(player: PlayerInfo) {
+fun AnimatedPlayerCard(player: Player) {
     var startAnimation by remember { mutableStateOf(false) }
 
     val scale: Float by animateFloatAsState(if (startAnimation) 1f else 0.9f, animationSpec = spring(dampingRatio = 0.5f, stiffness = Spring.StiffnessLow),
@@ -101,7 +95,7 @@ fun AnimatedPlayerCard(player: PlayerInfo) {
         startAnimation = true
     }
 
-    PlayerCard(name = player.name , link = "https://dummyimage.com/300", scale = scale)
+    PlayerCard(name = player.username , link = "https://dummyimage.com/300", scale = scale)
 }
 
 @Composable
@@ -142,6 +136,12 @@ fun PlayerCard(name : String, link : String, scale: Float){
 @Composable
 fun PlayerCardPreview() {
     LeagueOfImpostorsTheme {
-        AnimatedPlayerCard(player = PlayerInfo("PseudoDefault"))
+        AnimatedPlayerCard(player = Player( username = "PseudoDefault"))
     }
+}
+
+@Composable
+fun LogsDisplayer(webSocketViewModel: WebSocketViewModel = WebSocketViewModel()){
+    val messages by webSocketViewModel.messages
+    Text(text = messages)
 }

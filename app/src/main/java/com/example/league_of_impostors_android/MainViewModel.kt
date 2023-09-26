@@ -1,7 +1,7 @@
 package com.example.league_of_impostors_android
 
 import androidx.lifecycle.ViewModel
-import com.example.league_of_impostors_android.pages.room.PlayerInfo
+import com.example.league_of_impostors_android.models.Player
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,27 +11,27 @@ import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
 
 class MainViewModel : ViewModel() {
-    private var _uiPlayers: Flow<List<PlayerInfo>> = flow {
+    private var _uiPlayers: Flow<List<Player>> = flow {
         while (true) {
-            val _uiPlayers = getPlayerInfos()
+            val _uiPlayers = getPlayers()
             emit(_uiPlayers)
             delay(5000)
         }
     }
-    val uiPlayer: Flow<List<PlayerInfo>>
+    val uiPlayer: Flow<List<Player>>
         get() = _uiPlayers
 
-    private fun getPlayerInfos(): List<PlayerInfo> {
-        return getDummyPlayerInfos()
+    private fun getPlayers(): List<Player> {
+        return getDummyPlayers()
         // TODO: Récupérer la liste des roles via l'API firebase
 
     }
 
-    private fun getDummyPlayerInfos(): List<PlayerInfo> {
-        val roles = mutableListOf<PlayerInfo>()
+    private fun getDummyPlayers(): List<Player> {
+        val roles = mutableListOf<Player>()
         for (i in 1..5) {
             val random = Random().nextInt(10)
-            roles.add(PlayerInfo("Pseudo n° $i $random"))
+            roles.add(Player("Pseudo n° $i $random"))
         }
         return roles
     }
