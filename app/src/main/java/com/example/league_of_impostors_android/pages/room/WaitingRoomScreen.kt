@@ -61,7 +61,7 @@ fun WaitingRoomScreen() {
 
 @Composable
 fun PlayerList(webSocketViewModel: WebSocketViewModel = WebSocketViewModel()){
-    val players by webSocketViewModel.players
+    val players by webSocketViewModel.players.collectAsState()
     LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(5) { index ->
             PlayerCardHolder(index, players)
@@ -142,6 +142,5 @@ fun PlayerCardPreview() {
 
 @Composable
 fun LogsDisplayer(webSocketViewModel: WebSocketViewModel = WebSocketViewModel()){
-    val messages by webSocketViewModel.messages
-    Text(text = messages)
+
 }

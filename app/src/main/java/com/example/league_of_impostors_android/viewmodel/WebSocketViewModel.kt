@@ -8,10 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.league_of_impostors_android.models.Player
 import com.example.league_of_impostors_android.repository.WebSocketRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
 
 class WebSocketViewModel(val webSocketRepository: WebSocketRepository = WebSocketRepository()) : ViewModel(){
 
@@ -19,19 +23,19 @@ class WebSocketViewModel(val webSocketRepository: WebSocketRepository = WebSocke
     val players : StateFlow<List<Player>>
         get() = _players.asStateFlow()
 
-    private val _messages : MutableState<String> = mutableStateOf("")
-    val messages : MutableState<String>
-        get() = _messages
+    private val _messages = MutableSharedFlow<String>()
+    val messages : SharedFlow<String>
+        get() = _messages.asSharedFlow()
     init {
         viewModelScope.launch (Dispatchers.IO){
             webSocketRepository.webSocketEvent.collect { event ->
                 when (event)  {
                     is WebSocketEvent.PlayerUpdate -> {
-                        this@WebSocketViewModel._players.value = event.players
+                        this@WebSocketViewModel._players.emit(event.players)
                     }
                     is WebSocketEvent.SocketUpdate -> {
                         println(event.event)
-                        this@WebSocketViewModel._messages.value = event.event
+                        this@WebSocketViewModel._messages.emit(event.event)
                     }
                     is WebSocketEvent.ConnectionUpdate -> {
 
